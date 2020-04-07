@@ -11,7 +11,6 @@ namespace Encryption_DES.DES
             this.InitProgress = InitProgress;
         }
 
-        #region Event for progress bar
         public event Form1.ProgressInitHandler InitProgress;
         public event Form1.ProgressEventHandler IncrementProgress;
 
@@ -26,13 +25,9 @@ namespace Encryption_DES.DES
             if (InitProgress != null)
                 InitProgress(this, e);
         }
-        #endregion
 
-        #region Encryption Process
-        public override/*static*/ string EncryptionStart(string text, string key, bool IsTextBinary)
+        public override string EncryptionStart(string text, string key, bool IsTextBinary)
         {
-            #region Get 16 sub-keys using key
-
             string hex_key = this.FromTextToHex(key);
             string binary_key = this.FromHexToBinary(hex_key);
             string key_plus = this.DoPermutation(binary_key, DESData.pc_1);
@@ -44,11 +39,6 @@ namespace Encryption_DES.DES
 
             Keys keys = this.SetAllKeys(C0, D0);
 
-            #endregion
-
-            #region Encrypt process
-
-            //string hex_text = this.FromTextToHex(text);
             string binaryText = "";
 
             if (IsTextBinary == false)
@@ -62,9 +52,7 @@ namespace Encryption_DES.DES
 
             binaryText = this.setTextMutipleOf64Bits(binaryText);
 
-            #region Initialize Progress Bar
             OnInitProgress(new ProgressInitArgs(binaryText.Length));
-            #endregion
 
             StringBuilder EncryptedTextBuilder = new StringBuilder(binaryText.Length);
 
@@ -81,22 +69,14 @@ namespace Encryption_DES.DES
 
                 EncryptedTextBuilder.Append(FinalText);
 
-                #region Increase Progress Bar
                 OnIncrementProgress(new ProgressEventArgs(FinalText.Length));
-                #endregion
             }
 
             return EncryptedTextBuilder.ToString();
-
-            #endregion
         }
-        #endregion
 
-        #region Decryption Process 
-        public override/*static*/ string DecryptionStart(string text, string key, bool IsTextBinary)
+        public override string DecryptionStart(string text, string key, bool IsTextBinary)
         {
-            #region Get 16 sub-keys using key
-
             string hex_key = this.FromTextToHex(key);
             string binary_key = this.FromHexToBinary(hex_key);
             string key_plus = this.DoPermutation(binary_key, DESData.pc_1);
@@ -107,10 +87,6 @@ namespace Encryption_DES.DES
             D0 = this.SetRightHalvesKey(key_plus);
 
             Keys keys = this.SetAllKeys(C0, D0);
-
-            #endregion
-
-            #region Decrypt process
 
             string binaryText = "";
 
@@ -125,9 +101,7 @@ namespace Encryption_DES.DES
 
             binaryText = this.setTextMutipleOf64Bits(binaryText);
 
-            #region Initialize Progress Bar
             OnInitProgress(new ProgressInitArgs(binaryText.Length));
-            #endregion
 
             StringBuilder DecryptedTextBuilder = new StringBuilder(binaryText.Length);
 
@@ -142,7 +116,6 @@ namespace Encryption_DES.DES
 
                 string FinalText = this.FinalEncription(L0, R0, keys, true);
 
-                #region It's for correct subtracted '0' that have added for set text multiple of 64bit
                 if ((i * 64 + 64) == binaryText.Length)
                 {
                     StringBuilder last_text = new StringBuilder(FinalText.TrimEnd('0'));
@@ -163,27 +136,18 @@ namespace Encryption_DES.DES
 
                     DecryptedTextBuilder.Append(last_text.ToString() + append_text);
                 }
-                #endregion
                 else
                 {
                     DecryptedTextBuilder.Append(FinalText);
                 }
 
-                //DecryptedTextBuilder.Append(FinalText);
-
-                #region Increase Progress Bar
                 OnIncrementProgress(new ProgressEventArgs(FinalText.Length));
-                #endregion
             }
 
-            return DecryptedTextBuilder.ToString();//.TrimEnd('0');
-
-            #endregion
+            return DecryptedTextBuilder.ToString();
         }
-        #endregion
 
-        #region Check a string whether Korean or not. - not used in this program.
-        public /*static*/ bool IsKorean(char word)
+        public bool IsKorean(char word)
         {
             if (word >= '\xAC00' && word <= '\xD7AF')
             {
@@ -197,9 +161,7 @@ namespace Encryption_DES.DES
 
             return false;
         }
-        #endregion
 
-        #region Transform a text to a hex
         public string FromTextToHex(string text)
         {
             string hexstring = "";
@@ -211,9 +173,7 @@ namespace Encryption_DES.DES
 
             return hexstring;
         }
-        #endregion
 
-        #region Transform a hex or a binary number to text
         public string FromHexToText(string hexstring)
         {
             StringBuilder text = new StringBuilder(hexstring.Length / 2);
@@ -223,11 +183,10 @@ namespace Encryption_DES.DES
                 string word = hexstring.Substring(i * 2, 2);
                 text.Append((char)Convert.ToInt32(word, 16));
             }
-
             return text.ToString();
         }
 
-        public /*static*/ string FromBinaryToText(string binarystring)
+        public string FromBinaryToText(string binarystring)
         {
             StringBuilder text = new StringBuilder(binarystring.Length / 8);
 
@@ -235,14 +194,11 @@ namespace Encryption_DES.DES
             {
                 string word = binarystring.Substring(i * 8, 8);
                 text.Append((char)Convert.ToInt32(word, 2));
-                //text += (char)Convert.ToInt32(word, 16);
             }
 
             return text.ToString();
         }
-        #endregion
 
-        #region Set a length of text to multiple of 64 bits
         public string setTextMutipleOf64Bits(string text)
         {
             if ((text.Length % 64) != 0)
@@ -251,12 +207,9 @@ namespace Encryption_DES.DES
                 maxLength = ((text.Length / 64) + 1) * 64;
                 text = text.PadRight(maxLength, '0');
             }
-
             return text;
         }
-        #endregion
 
-        #region Transform an integer to binary number
         public string FromTextToBinary(string text)
         {
             StringBuilder binarystring = new StringBuilder(text.Length * 8);
@@ -329,9 +282,7 @@ namespace Encryption_DES.DES
 
             return value;
         }
-        #endregion
 
-        #region Transform a hex integer to a binary number
         public string FromHexToBinary(string hexstring)
         {
             string binarystring = "";
@@ -366,9 +317,7 @@ namespace Encryption_DES.DES
 
             return binarystring;
         }
-        #endregion
 
-        #region Permutation
         public string DoPermutation(string text, int[] order)
         {
             StringBuilder PermutatedText = new StringBuilder(order.Length);
@@ -381,7 +330,6 @@ namespace Encryption_DES.DES
             return PermutatedText.ToString();
         }
 
-        //For SBoxes Transformation
         public string DoPermutation(string text, int[,] order)
         {
             string PermutatedText = "";
@@ -393,9 +341,7 @@ namespace Encryption_DES.DES
 
             return PermutatedText;
         }
-        #endregion
 
-        #region Divide a text to left and right halves
         public string SetLeftHalvesKey(string text)
         {
             return this.SetHalvesKey(true, text);
@@ -429,9 +375,7 @@ namespace Encryption_DES.DES
 
             return result;
         }
-        #endregion
 
-        #region Do Leftshift
         public string LeftShift(string text)
         {
             return this.LeftShift(text, 1);
@@ -451,9 +395,7 @@ namespace Encryption_DES.DES
 
             return shifted.ToString();
         }
-        #endregion
 
-        #region KeyµйА» ±ёЗПґВ ёЮј­µе - Get all of keys
         public Keys SetAllKeys(string C0, string D0)
         {
             Keys keys = new Keys();
@@ -469,9 +411,7 @@ namespace Encryption_DES.DES
 
             return keys;
         }
-        #endregion
 
-        #region Do Encryption
         public string FinalEncription(string L0, string R0, Keys keys, bool IsReverse)
         {
             string Ln = "", Rn = "", Ln_1 = L0, Rn_1 = R0;
@@ -509,13 +449,11 @@ namespace Encryption_DES.DES
             return Encripted_Text;
         }
 
-        public /*static*/ bool IsEnough(int i, bool IsReverse)
+        public bool IsEnough(int i, bool IsReverse)
         {
             return (IsReverse == false) ? i < 16 : i >= 0;
         }
-        #endregion
 
-        #region The function f
         public string f(string Rn_1, string Kn)
         {
             string E_Rn_1 = this.E_Selection(Rn_1);
@@ -528,9 +466,7 @@ namespace Encryption_DES.DES
 
             return P_sBoxedText;
         }
-        #endregion
 
-        #region The function P
         public string P(string text)
         {
             string PermutatedText = "";
@@ -539,9 +475,7 @@ namespace Encryption_DES.DES
 
             return PermutatedText;
         }
-        #endregion
 
-        #region SBoxes transformation
         public string sBox_Transform(string text)
         {
             StringBuilder TransformedText = new StringBuilder(32);
@@ -554,18 +488,14 @@ namespace Encryption_DES.DES
 
             return TransformedText.ToString();
         }
-        #endregion
 
-        #region E Selection
         public string E_Selection(string Rn_1)
         {
             string ExpandedText = this.DoPermutation(Rn_1, DESData.pc_e);
 
             return ExpandedText;
         }
-        #endregion
 
-        #region XOR operation
         public string XOR(string text1, string text2)
         {
             if (text1.Length != text2.Length)
@@ -590,6 +520,5 @@ namespace Encryption_DES.DES
 
             return XORed_Text.ToString();
         }
-        #endregion
     }
 }

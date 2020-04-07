@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace Encryption_DES
@@ -50,13 +43,11 @@ namespace Encryption_DES
                 MessageBox.Show(" File Encryption/Decryption is complete.");
                 label7.Visible = true;
             }
-
             EnableButtons();
         }
 
         private void StartSelectedProcess()
         {
-
             if (IsEncryption == true)
             {
                 if (IsFile == true)
@@ -74,7 +65,6 @@ namespace Encryption_DES
                 }
             }
         }
-
 
         private void btnFileEncrypt_Click(object sender, EventArgs e)
         {

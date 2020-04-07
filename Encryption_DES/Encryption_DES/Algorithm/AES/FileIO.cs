@@ -32,15 +32,12 @@ namespace Encryption_DES.AES
                     {
                         break;
                     }
-
                     text.Append(BaseTransform.FromDeciamlToBinary(b));
                 }
             }
 
             fs.Close();
-
             return text.ToString();
-
         }
 
         public static void WriteBinaryToFile(string filename, string binaryText)

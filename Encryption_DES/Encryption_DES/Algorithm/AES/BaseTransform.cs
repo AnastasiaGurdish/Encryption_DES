@@ -16,7 +16,6 @@ namespace Encryption_DES.AES
             {
                 hexstring.Append(String.Format("{0:X}", Convert.ToInt32(word)));
             }
-
             return hexstring.ToString();
         }
 
@@ -29,7 +28,6 @@ namespace Encryption_DES.AES
                 string word = hexstring.Substring(i * 2, 2);
                 text.Append((char)Convert.ToInt32(word, 16));
             }
-
             return text.ToString();
         }
 
@@ -41,9 +39,7 @@ namespace Encryption_DES.AES
             {
                 string word = binarystring.Substring(i * 8, 8);
                 text.Append((char)Convert.ToInt32(word, 2));
-                //text += (char)Convert.ToInt32(word, 16);
             }
-
             return text.ToString();
         }
 
@@ -57,7 +53,6 @@ namespace Encryption_DES.AES
             }
 
             text = text.PadRight(maxLength, '0');
-
             return text;
         }
 
@@ -85,7 +80,6 @@ namespace Encryption_DES.AES
                 }
                 factor /= 2;
             }
-
             return binarystring;
         }
 
@@ -103,7 +97,6 @@ namespace Encryption_DES.AES
 
                 factor /= 2;
             }
-
             return value;
         }
 
@@ -138,7 +131,6 @@ namespace Encryption_DES.AES
             {
                 Console.WriteLine(e.Message + " - wrong hexa integer format.");
             }
-
             return binarystring.ToString();
         }
 
@@ -152,7 +144,6 @@ namespace Encryption_DES.AES
 
                 hexstring.Append(String.Format("{0:X}", word));
             }
-
             return hexstring.ToString();
         }
 
@@ -179,7 +170,6 @@ namespace Encryption_DES.AES
                     factor /= 2;
                 }
             }
-
             return binarystring.ToString();
         }
         public static string setTextMutipleOf128Bits(string text)
@@ -191,7 +181,6 @@ namespace Encryption_DES.AES
 
                 text = text.PadRight(maxLength, '0');
             }
-
             return text;
         }
     }

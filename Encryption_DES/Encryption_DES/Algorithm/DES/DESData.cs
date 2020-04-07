@@ -3,7 +3,6 @@
 
 namespace Encryption_DES.DES
 {
-
     class DESData
     {
         public static readonly int[] pc_1 ={ 57, 49, 41, 33, 25, 17, 9, 1, 58, 50,
@@ -95,8 +94,6 @@ namespace Encryption_DES.DES
     {
         public string[] Cn = new string[17];
         public string[] Dn = new string[17];
-
         public string[] Kn = new string[16];
     }
-
 }

@@ -38,7 +38,6 @@ namespace Encryption_DES.DES
             }
 
             fs.Close();
-
             return text.ToString();
         }
 
